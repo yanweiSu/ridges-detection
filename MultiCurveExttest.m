@@ -21,9 +21,6 @@ time_MultiCurveExt = {};
 for am = 2:-1:1
 
 startSNR = 1;
-if am == 3
-    startSNR = 3;
-end
 
 for snrdb = startSNR:3
 % am = 1; snrdb = 3; r = 76;
