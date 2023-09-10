@@ -319,47 +319,6 @@ tfr = STFT;
 % tfrsqtic = tfrtic;
 tfrsqtic = reshape(FxRRP, [], 1);
 
-figure;
-subplot(1,3,2);imageSQ((1:size(tfrsq,2))./fs, tfrsqtic, abs(tfrsq), 0.99);
-axis xy; colormap(1-gray); %colorbar
-xlabel('time(sec)');
-% ylabel('frequency(Hz)');
-set(gca, 'FontSize', 20);
-ylim([0 20]);
-xlim(segTFR);
-
-subplot(1,3,1);
-imageSQ((1:size(tfr,2))./fs, tfrtic, abs(tfr), 0.99);
-axis xy; colormap(1-gray); %colorbar
-xlabel('time(sec)');
-ylabel('frequency(Hz)');
-set(gca, 'FontSize', 20);
-ylim([0 20]);
-xlim(segTFR);
-
-% tfrtic = (0:Nfft/2-1)*fr;
-% tfrtic = reshape(tfrtic, [], 1);
-[~,minIdx] = min(cRRP(1,:));
-c = cFM(:,minIdx);
-subplot(1,3,3);
-imageSQ((1:size(tfrsq,2))./fs, tfrsqtic, abs(tfrsq), 0.99);
-for k = 1:3
-    hold on;
-    plot((1:size(cALL,1))./fs, tfrsqtic(cALL(:,k)), '-r', 'LineWidth', 3);
-end
-hold on;
-plot((1:length(c))./fs, tfrtic(c), ':b', 'LineWidth', 3);
-% for k = 1:3
-%     hold on;
-%     plot((1:length(c))./fs, cRRP(:,k), '-b', 'LineWidth', 1.2);
-% end
-axis xy; colormap(1-gray); %colorbar
-xlabel('time(sec)');
-% ylabel('frequency(Hz)');
-set(gca, 'FontSize', 20);
-ylim([0 20]);
-xlim(segTFR);
-
 %% 3curves-MultiCurveExt
 lambda = [1.0, 0.8, 0.6];
 mu = [0.3 0];
@@ -385,32 +344,44 @@ end
 hold off;
 xlim(segTFR);
 
-% %% comb filter
-% comb = abs(tfrsq);
-% for t = 1:size(comb,2)
-% for f = 1:size(comb,1)
-% for k = 2:4
-%     RR = max(1, k*f-10) : min(size(comb,1), k*f+10);
-%     add = max(abs(tfrsq(RR,t)));
-%     if isempty(RR)
-%         add = 0;
-%     end
-%     comb(f,t) = comb(f,t) + add;
-% end
-% end
-% end
-
 %%
 figure;
-imageSQ((0:size(tfrsq,2)-1)./fs, tfrsqtic*fs, abs(comb), 0.99);
-colormap(1-gray); colorbar;
-set(gca,'YDir','normal');
-xlabel("time"); ylabel("frequency"); ylim([0 15])
-title("result of the ridge detection");
+subplot(1,3,2);imageSQ((1:size(tfrsq,2))./fs, tfrsqtic, abs(tfrsq), 0.99);
+axis xy; colormap(1-gray); %colorbar
+xlabel('time(sec)');
+% ylabel('frequency(Hz)');
+set(gca, 'FontSize', 20);
+ylim([0 20]);
+xlim(segTFR);
 
-idx = find(tfrsqtic*fs > 0.5 & tfrsqtic*fs < 10);
-[c] = CurveExt(abs(comb(idx,:)).', .0);
-c = c + idx(1) - 1;
+subplot(1,3,1);
+imageSQ((1:size(tfr,2))./fs, tfrtic, abs(tfr), 0.99);
+axis xy; colormap(1-gray); %colorbar
+xlabel('time(sec)');
+ylabel('frequency(Hz)');
+set(gca, 'FontSize', 20);
+ylim([0 20]);
+xlim(segTFR);
+
+% tfrtic = (0:Nfft/2-1)*fr;
+% tfrtic = reshape(tfrtic, [], 1);
+[~,minIdx] = min(cFM(round(size(cFM,1)/3),:));
+cfm = cFM(:,minIdx);
+subplot(1,3,3);
+imageSQ((1:size(tfrsq,2))./fs, tfrsqtic, abs(tfrsq), 0.99);
+for k = 1:3
+    hold on;
+    plot((1:size(cALL,1))./fs, tfrsqtic(cALL(:,k)), '-r', 'LineWidth', 3);
+end
+for k = 1:1%size(cRRP,2)
+    hold on;
+    plot((1:size(cRRP,1))./fs, cRRP(:,k), '-b', 'LineWidth', 1.5);
+end
 hold on;
-plot((0:length(c)-1)./fs, tfrsqtic(c)*fs, 'r');
-hold off;
+plot((1:length(cfm))./fs, tfrtic(cfm), '--m', 'LineWidth', 4);
+axis xy; colormap(1-gray); %colorbar
+xlabel('time(sec)');
+% ylabel('frequency(Hz)');
+set(gca, 'FontSize', 20);
+ylim([0 20]);
+xlim(segTFR);
