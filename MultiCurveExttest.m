@@ -10,24 +10,17 @@ AFUND2 = 1.0;
 SNR = [Inf 5 0];
 AFUND1 = [.1 0.2 0.5];
 
-load ./newARMAnoise/curve_MultiCurveExt.mat
-load ./newARMAnoise/RMSE_MultiCurveExt.mat
-load ./newARMAnoise/time_MultiCurveExt.mat
+% load ./newARMAnoise/curve_MultiCurveExt.mat
+% load ./newARMAnoise/RMSE_MultiCurveExt.mat
+% load ./newARMAnoise/time_MultiCurveExt.mat
 
-% curve_MultiCurveExt = {};
-% RMSE_MultiCurveExt = {};
-% time_MultiCurveExt = {};
-% 
-% curve_RRPRD = {};
-% RMSE_RRPRD = {};
-% time_RRPRD = {};
+curve_MultiCurveExt = {};
+RMSE_MultiCurveExt = {};
+time_MultiCurveExt = {};
 
 for am = 2:-1:1
 
 startSNR = 1;
-if am == 3
-    startSNR = 3;
-end
 
 for snrdb = startSNR:3
 % am = 1; snrdb = 3; r = 76;
@@ -37,13 +30,6 @@ start = 1;
 curveMH = zeros(2048,100);
 rmseMH = zeros(100,1);
 elapsedMH = zeros(100,1);
-
-if snrdb == 3 && am == 3
-    start = 66;
-    curveMH = curve_MultiCurveExt{am,snrdb};
-    rmseMH = RMSE_MultiCurveExt{am,snrdb};
-    elapsedMH = time_MultiCurveExt{am,snrdb};
-end
 
 D = AFUND1(am);
 snr = SNR(snrdb);
